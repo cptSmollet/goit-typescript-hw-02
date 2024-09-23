@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchPhotosApi } from "./components/services/photos-api";
+import { fetchPhotosApi, Photo } from "./components/services/photos-api";
 import SearchBar from "./components/SearchBar/SearchBar";
 import ImageGallery from "./components/ImageGallery/ImageGallery";
 import Loader from "./components/Loader/Loader";
@@ -7,15 +7,18 @@ import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
 import LoadMoreBtn from "./components/LoadMoreBtn/LoadMoreBtn";
 import ImageModal from "./components/ImageModal/ImageModal";
 
-function App() {
-  const [photos, setPhotos] = useState([]);
+const App: React.FC = () => {
+  const [photos, setPhotos] = useState<Photo[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [searchValue, setSearchValue] = useState("");
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
   const [isOpenModal, setIsOpenModal] = useState(false);
-  const [onPhoto, setOnPhoto] = useState({ url: "", alt: "" });
+  const [onPhoto, setOnPhoto] = useState<{ url: string; alt: string }>({
+    url: "",
+    alt: "",
+  });
 
   const openModal = () => {
     setIsOpenModal(true);
@@ -27,6 +30,7 @@ function App() {
 
   useEffect(() => {
     if (searchValue.trim() === "") return;
+
     const fetchPhotosBySearchValue = async () => {
       try {
         setLoading(true);
@@ -35,46 +39,44 @@ function App() {
 
         setPhotos((prev) => [...prev, ...data.results]);
         setTotalPage(data.total_pages);
-      } catch (error) {
-        setError(error.message);
+      } catch (err) {
+        setError((err as Error).message);
       } finally {
         setLoading(false);
       }
     };
+
     fetchPhotosBySearchValue();
   }, [searchValue, pageNumber]);
 
-  const onSubmit = (searchTerm) => {
-    setPhotos([]);
-    setSearchValue(searchTerm);
-    setPageNumber(1);
-  };
-  const onLoadMore = () => {
-    setPageNumber((pageNumber) => pageNumber + 1);
+  const handleSearch = (newSearchValue: string) => {
+    if (newSearchValue === searchValue) {
+      return;
+    }
 
-    console.log(pageNumber);
+    setSearchValue(newSearchValue);
+    setPageNumber(1);
+    setPhotos([]);
+  };
+
+  const onLoadMore = () => {
+    setPageNumber((prevPageNumber) => prevPageNumber + 1);
   };
 
   return (
-    <>
-      <SearchBar onSubmit={onSubmit} />
-      <ImageModal
-        isOpenModal={isOpenModal}
-        closeModal={closeModal}
-        onPhoto={onPhoto}
-      />
-      {loading && <Loader />}
-      {error !== null && <ErrorMessage errorMessage={error} />}
+    <div>
+      <SearchBar onSubmit={handleSearch} />
+      {error && <ErrorMessage errorMessage={error} />}
       {photos.length > 0 && (
-        <ImageGallery
-          photos={photos}
-          openModal={openModal}
-          setOnPhoto={setOnPhoto}
-        />
+        <ImageGallery photos={photos} openModal={openModal} setOnPhoto={setOnPhoto} />
       )}
-      {pageNumber < totalPage && <LoadMoreBtn onLoadMore={onLoadMore} />}
-    </>
+      {loading && <Loader />}
+      {photos.length > 0 && !loading && pageNumber < totalPage && (
+        <LoadMoreBtn onLoadMore={onLoadMore} />
+      )}
+      <ImageModal isOpenModal={isOpenModal} closeModal={closeModal} onPhoto={onPhoto} />
+    </div>
   );
-}
+};
 
 export default App;

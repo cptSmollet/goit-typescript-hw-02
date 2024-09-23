@@ -2,7 +2,7 @@ import css from "./SearchBar.module.css";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import { toast, ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css'; // Не забудьте импортировать стили
+import "react-toastify/dist/ReactToastify.css";
 
 const FeedbackSchema = Yup.object().shape({
   searchTerm: Yup.string()
@@ -11,17 +11,17 @@ const FeedbackSchema = Yup.object().shape({
     .required("Required! Enter any word..."),
 });
 
-const initialValues = {
-  searchTerm: "",
-};
+interface SearchBarProps {
+  onSubmit: (searchTerm: string) => void;
+}
 
-const SearchBar = ({ onSubmit }) => {
-  const handleSubmit = (values, actions) => {
+const SearchBar: React.FC<SearchBarProps> = ({ onSubmit }) => {
+  const handleSubmit = (values: { searchTerm: string }, actions: any) => {
     if (!values.searchTerm.trim()) {
-      toast.error("Search term cannot be empty!"); // Показать уведомление о пустом поле
+      toast.error("Search term cannot be empty!");
       return;
     }
-    
+
     onSubmit(values.searchTerm);
     actions.resetForm();
   };
@@ -29,9 +29,9 @@ const SearchBar = ({ onSubmit }) => {
   return (
     <div>
       <header className={css.searchBar}>
-        <ToastContainer /> {/* Контейнер для уведомлений */}
+        <ToastContainer />
         <Formik
-          initialValues={initialValues}
+          initialValues={{ searchTerm: "" }}
           onSubmit={handleSubmit}
           validationSchema={FeedbackSchema}
         >
