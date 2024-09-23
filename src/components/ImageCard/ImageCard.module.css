@@ -1,0 +1,11 @@
+.wrapper {
+  cursor: pointer;
+}
+
+.picture {
+  border-radius: 5px;
+}
+
+.picture:hover {
+  scale: 1.05;
+}

@@ -1,0 +1,15 @@
+.modalPhotosContainer {
+  max-width: 800px;
+}
+
+.photo {
+  display: block;
+  width: 100%;
+  margin: auto;
+  margin-bottom: 12px;
+  border-radius: 8px;
+}
+.description {
+  text-align: center;
+  font-size: 18px;
+}

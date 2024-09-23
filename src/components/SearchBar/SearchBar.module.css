@@ -1,0 +1,41 @@
+.searchBar {
+  text-align: center;
+  padding: 10px;
+  margin-bottom: 30px;
+}
+
+.Input {
+  width: 300px;
+  margin-right: 20px;
+  background-color: azure;
+  padding: 7px;
+  border: 1px solid #000000;
+  border-radius: 5px;
+  color: #000000;
+}
+
+.searchInput:hover,
+.searchInput:focus {
+  outline: none;
+  border: 1px solid #6087fa;
+}
+
+.Btn {
+  padding: px 15px;
+  border: 1px solid #000000;
+  border-radius: 5px;
+  background-color: #e05d00;
+}
+
+.searchBtn:hover,
+.searchBtn:focus {
+  outline: none;
+  border: 1px solid #6087fa;
+  cursor: pointer;
+  color: #6087fa;
+  transition: color linear 250ms;
+}
+
+.formErrorMessage {
+  color: red;
+}

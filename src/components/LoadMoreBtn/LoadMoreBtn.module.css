@@ -1,0 +1,16 @@
+.loadMoreBtn {
+  padding: 10px 15px;
+  border: 1px solid #000000;
+  border-radius: 5px;
+  margin: 0 auto;
+  display: block;
+  cursor: pointer;
+  background-color: #e05d00;
+}
+
+.loadMoreBtn:hover,
+.loadMoreBtn:focus {
+  color: #6087fa;
+  border: 1px solid #6087fa;
+  transition: color linear 250ms;
+}
